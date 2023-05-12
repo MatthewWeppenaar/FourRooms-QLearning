@@ -2,6 +2,10 @@ from FourRooms import FourRooms
 import numpy as np
 import random
 
+def convertTo1D(n):
+    #takes in a tuple(x,y) and it converts it into a 1d index for the Q-table
+    postion = n[0]*12+n[1]
+    return postion
 
 def main():
 
@@ -35,11 +39,10 @@ def main():
             #exploitation
             else:
                 #getting 'reward' from q-table
-                one_dim = fourRoomsObj.getPosition()[0]*12+fourRoomsObj.getPosition()[1]
-                action = np.argmax(q_table[one_dim])
+                action = np.argmax(q_table[convertTo1D(fourRoomsObj.getPosition())])
 
             #creating a tempory variable to old the current state
-            current_position = fourRoomsObj.getPosition()[0]*12+fourRoomsObj.getPosition()[1]
+            current_position = convertTo1D(fourRoomsObj.getPosition())
             
             #getting a new position
             gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(action)
@@ -54,7 +57,7 @@ def main():
                 reward -=10
             #updating q-table
             prev_q = q_table[current_position, action]
-            next_max_q = np.max(q_table[newPos[0]*12+newPos[1]])
+            next_max_q = np.max(q_table[convertTo1D(newPos)])
             new_q = (1 - learning_rate) * prev_q + learning_rate * (reward + discount_factor * next_max_q)
             q_table[current_position, action] = new_q
     #showing the final path
