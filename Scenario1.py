@@ -1,4 +1,6 @@
 from FourRooms import FourRooms
+import numpy as np
+import random
 
 
 def main():
@@ -12,10 +14,35 @@ def main():
     exploration = 0.1
     epochs = 1000
 
+    #creating a q-table, given set of states and set of actions
+    q_table = np.zeros([12*12, 4])
+
+
     aTypes = ['UP', 'DOWN', 'LEFT', 'RIGHT']
     gTypes = ['EMPTY', 'RED', 'GREEN', 'BLUE']
 
     print('Agent starts at: {0}'.format(fourRoomsObj.getPosition()))
+
+    for trip in range(epochs):
+         #reset environemt
+         fourRoomsObj.newEpoch()
+         #set initial terminal state to false
+         isTerminal = False
+         
+         while not isTerminal:
+            #getting a random value to decide between exploration or exploitation
+            random_value = random.uniform(0,1)
+            #exploration
+            if (random_value < exploration):
+                action = random.randint(0,3)# Explore a random action
+            #exploitation
+            else:
+                #getting 'reward' from q-table
+                one_dim = fourRoomsObj.getPosition()[0]*12+fourRoomsObj.getPosition()[1]
+                action = np.argmax(q_table[one_dim])
+
+            current_position = fourRoomsObj.getPosition()[0]*12+fourRoomsObj.getPosition()[1]
+
 
     for act in actSeq:
         gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(act)
