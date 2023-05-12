@@ -60,20 +60,7 @@ def main():
             next_max_q = np.max(q_table[newPos[0]*12+newPos[1]])
             new_q = (1 - learning_rate) * prev_q + learning_rate * (reward + discount_factor * next_max_q)
             q_table[current_position, action] = new_q
-        
-
-
-    for act in actSeq:
-        gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(act)
-
-        print("Agent took {0} action and moved to {1} of type {2}".format (aTypes[act], newPos, gTypes[gridType]))
-
-        if isTerminal:
-            break
-
-    # Don't forget to call newEpoch when you start a new simulation run
-
-    # Show Path
+    #showing the final path
     fourRoomsObj.showPath(-1)
 
 
