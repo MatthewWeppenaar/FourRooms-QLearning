@@ -41,7 +41,20 @@ def main():
                 one_dim = fourRoomsObj.getPosition()[0]*12+fourRoomsObj.getPosition()[1]
                 action = np.argmax(q_table[one_dim])
 
+            #creating a tempory variable to old the current state
             current_position = fourRoomsObj.getPosition()[0]*12+fourRoomsObj.getPosition()[1]
+            
+            #getting a new position
+            gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(action)
+
+            #added reward function
+            reward = 0
+            #if the package is collected we reward agent with 100
+            if packagesRemaining == 0:
+                reward = 100
+            #else we penalize for each extra step
+            else:
+                reward -=1 
 
 
     for act in actSeq:
