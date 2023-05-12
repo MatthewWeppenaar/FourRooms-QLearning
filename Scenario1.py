@@ -6,12 +6,12 @@ import random
 def main():
 
     # Create FourRooms Object
-    fourRoomsObj = FourRooms('simple',True)
+    fourRoomsObj = FourRooms('simple')
 
     #hyper-parameters
     learning_rate = 0.1
     discount_factor = 0.6
-    exploration = 0.01
+    exploration = 0.01# very low exploration rate
     epochs = 10000
 
     #creating a q-table, given set of states and set of actions
