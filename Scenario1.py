@@ -54,7 +54,13 @@ def main():
                 reward = 100
             #else we penalize for each extra step
             else:
-                reward -=1 
+                reward -=1
+            #updating q-table
+            prev_q = q_table[current_position, action]
+            next_max_q = np.max(q_table[newPos[0]*12+newPos[1]])
+            new_q = (1 - learning_rate) * prev_q + learning_rate * (reward + discount_factor * next_max_q)
+            q_table[current_position, action] = new_q
+        
 
 
     for act in actSeq:
