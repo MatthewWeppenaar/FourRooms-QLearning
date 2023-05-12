@@ -6,11 +6,11 @@ def main():
     # Create FourRooms Object
     fourRoomsObj = FourRooms('simple')
 
-    # This will try to draw a zero
-    actSeq = [FourRooms.LEFT, FourRooms.LEFT, FourRooms.LEFT,
-              FourRooms.UP, FourRooms.UP, FourRooms.UP,
-              FourRooms.RIGHT, FourRooms.RIGHT, FourRooms.RIGHT,
-              FourRooms.DOWN, FourRooms.DOWN, FourRooms.DOWN]
+    #hyper-parameters
+    learning_rate = 0.1
+    discount_factor = 0.6
+    exploration = 0.1
+    epochs = 1000
 
     aTypes = ['UP', 'DOWN', 'LEFT', 'RIGHT']
     gTypes = ['EMPTY', 'RED', 'GREEN', 'BLUE']
