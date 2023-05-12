@@ -6,20 +6,17 @@ import random
 def main():
 
     # Create FourRooms Object
-    fourRoomsObj = FourRooms('simple')
+    fourRoomsObj = FourRooms('simple',True)
 
     #hyper-parameters
     learning_rate = 0.1
     discount_factor = 0.6
-    exploration = 0.1
-    epochs = 1000
+    exploration = 0.01
+    epochs = 10000
 
     #creating a q-table, given set of states and set of actions
     q_table = np.zeros([12*12, 4])
 
-
-    aTypes = ['UP', 'DOWN', 'LEFT', 'RIGHT']
-    gTypes = ['EMPTY', 'RED', 'GREEN', 'BLUE']
 
     print('Agent starts at: {0}'.format(fourRoomsObj.getPosition()))
 
@@ -54,7 +51,7 @@ def main():
                 reward = 100
             #else we penalize for each extra step
             else:
-                reward -=1
+                reward -=10
             #updating q-table
             prev_q = q_table[current_position, action]
             next_max_q = np.max(q_table[newPos[0]*12+newPos[1]])
