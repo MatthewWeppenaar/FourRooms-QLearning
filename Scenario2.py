@@ -20,7 +20,7 @@ def main():
     exploration_min = 0.01  # Final exploration rate
     exploration_decay = 0.01 # Rate of exploration decay
     epochs = 5000
-  # very low explor
+
 
     # Creating a Q-table, given the set of states and set of actions
     q_table = np.zeros([12 * 12, 4])
@@ -35,7 +35,8 @@ def main():
         
         # Set initial terminal state to False
         isTerminal = False
-        
+        #adding exploration decay
+        exploration = exploration_min + (exploration_max - exploration_min) * np.exp(-exploration_decay * trip)
 
         while not isTerminal:
             # Getting a random value to decide between exploration or exploitation
@@ -76,7 +77,7 @@ def main():
     print(q_table)
     print("Time taken to run {0} Epochs".format(epochs))
     print("--- %s seconds ---" % (time.time() - start_time))
-    fourRoomsObj.showPath(-1,"Scenario_1.png")
+    fourRoomsObj.showPath(-1,"Scenario_2.png")
 
 
 if __name__ == "__main__":
