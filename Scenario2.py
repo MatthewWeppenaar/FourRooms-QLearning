@@ -1,108 +1,82 @@
 from FourRooms import FourRooms
 import numpy as np
 import random
+import time
+
 
 def convertTo1D(n):
-    #takes in a tuple(x,y) and it converts it into a 1d index for the Q-table
-    postion = n[0]*12+n[1]
-    return postion
-
-
+    # takes in a tuple (x, y) and converts it into a 1D index for the Q-table
+    position = n[0] * 12 + n[1]
+    return position
 
 def main():
-
-    aTypes = ['UP', 'DOWN', 'LEFT', 'RIGHT']
-    gTypes = ['EMPTY', 'RED', 'GREEN', 'BLUE']
-
     # Create FourRooms Object
-    fourRoomsObj = FourRooms('multi')
-
-    #hyper-parameters
-    learning_rate = 0.1
-    discount_factor = 0.8
-    exploration_max = 1.0  # Initial exploration rate
+    fourRoomsObj = FourRooms('simple')
+    total_reward = 0
+    # Hyperparameters
+    learning_rate = 0.3
+    discount_factor = 0.95
+    exploration_max = 1  # Initial exploration rate
     exploration_min = 0.01  # Final exploration rate
-    exploration_decay = 0.001  # Rate of exploration dec
-    epochs = 10000
-    #creating a q-table, given set of states and set of actions
-    q_table = np.zeros([4,144, 4])
-    print(q_table[0][1])
+    exploration_decay = 0.01 # Rate of exploration decay
+    epochs = 5000
+  # very low explor
+
+    # Creating a Q-table, given the set of states and set of actions
+    q_table = np.zeros([12 * 12, 4])
 
     print('Agent starts at: {0}'.format(fourRoomsObj.getPosition()))
+    start_time = time.time()
 
-    
     for trip in range(epochs):
-    
-         
-         
-         print(trip)
-         print(fourRoomsObj.getPackagesRemaining())
-         print(q_table[fourRoomsObj.getPackagesRemaining()])
-         #reset environemt
-         fourRoomsObj.newEpoch()
-         #set initial terminal state to false
-         isTerminal = False
-         state = fourRoomsObj.getPosition()
-         subgoals = 3
-         
-         
-         
-         while not isTerminal:
-            #getting a random value to decide between exploration or exploitation
-            random_value = random.uniform(0,1)
-            #exploration
-            if (random_value < exploration):
-                action = random.randint(0,3)# Explore a random action
-            #exploitation
-            else:
-                #getting 'reward' from q-table
-                action = np.argmax(q_table[fourRoomsObj.getPackagesRemaining(),convertTo1D(state)])
+        fourRoomsObj.newEpoch()
+        state = fourRoomsObj.getPosition()
+        # Reset environment
+        
+        # Set initial terminal state to False
+        isTerminal = False
+        
 
-            #creating a tempory variable to old the current state
+        while not isTerminal:
+            # Getting a random value to decide between exploration or exploitation
+            random_value = random.uniform(0, 1)
+            # Exploration
+            if random_value < exploration:
+                action = random.randint(0, 3)  # Explore a random action
+            # Exploitation
+            else:
+                # Getting 'reward' from q-table
+                action = np.argmax(q_table[convertTo1D(state)])
+
+            # Creating a temporary variable to hold the current state
             current_position = convertTo1D(state)
-            
-            #getting a new position
+
+            # Getting a new position
             gridType, newPos, packagesRemaining, isTerminal = fourRoomsObj.takeAction(action)
 
-            #added reward function
-
-            
+            # Added reward function
             reward = 0
-            #if the package is collected we reward agent with 100
-
-            if packagesRemaining<subgoals:
-                reward+=10
             
-            reward-=0.1
-            #if packagesRemaining == 0:
-               # reward += 5
-
-            #elif packagesRemaining==1:
-                #reward += 2
-
-            #elif packagesRemaining == 2:
-                #reward +=1
-            
-            
-            #reward -= 0.01
-            #reward += 0.5*(3-packagesRemaining)
-
-            prev_q = q_table[packagesRemaining,current_position, action]
-            next_max_q = np.max(q_table[packagesRemaining,convertTo1D(newPos)])
+            if packagesRemaining < total_reward:
+            #rewarding agent proportional to how many packages have been collected
+                reward += 100/(total_reward+1)
+        
+        
+            reward -= 1
+            #punishing agent on each extra step
+            total_reward = packagesRemaining
+            # Updating q-table
+            prev_q = q_table[current_position, action]
+            next_max_q = np.max(q_table[convertTo1D(newPos)])
             new_q = (1 - learning_rate) * prev_q + learning_rate * (reward + discount_factor * next_max_q)
-            q_table[packagesRemaining,current_position, action] = new_q
+            q_table[current_position, action] = new_q
 
             state = newPos
-
-         if packagesRemaining == 0:
-            subgoals -= 1
-        
-         exploration *= exploration_decay
-         exploration = max(exploration,exploration_min)
-        
-            #print("Agent took {0} action and moved to {1} of type {2}".format (aTypes[action], newPos, gTypes[gridType]))
-    #showing the final path
-    fourRoomsObj.showPath(-1)
+    # Showing the final path
+    print(q_table)
+    print("Time taken to run {0} Epochs".format(epochs))
+    print("--- %s seconds ---" % (time.time() - start_time))
+    fourRoomsObj.showPath(-1,"Scenario_1.png")
 
 
 if __name__ == "__main__":
