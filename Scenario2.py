@@ -2,6 +2,8 @@ from FourRooms import FourRooms
 import numpy as np
 import random
 import time
+import sys
+
 
 
 def convertTo1D(n):
@@ -10,16 +12,19 @@ def convertTo1D(n):
     return position
 
 def main():
-    # Create FourRooms Object
-    fourRoomsObj = FourRooms('simple')
-    total_reward = 0
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "-stochastic":
+            fourRoomsObj = FourRooms('simple',stochastic="True")
+    else:
+        fourRoomsObj = FourRooms('simple')
+    
     # Hyperparameters
     learning_rate = 0.3
     discount_factor = 0.95
     exploration_max = 1  # Initial exploration rate
     exploration_min = 0.01  # Final exploration rate
     exploration_decay = 0.01 # Rate of exploration decay
-    epochs = 5000
+    epochs = 2000
 
 
     # Creating a Q-table, given the set of states and set of actions
@@ -32,12 +37,12 @@ def main():
         fourRoomsObj.newEpoch()
         state = fourRoomsObj.getPosition()
         # Reset environment
-        
+        print(trip)
         # Set initial terminal state to False
         isTerminal = False
         #adding exploration decay
         exploration = exploration_min + (exploration_max - exploration_min) * np.exp(-exploration_decay * trip)
-
+        total_reward = 0
         while not isTerminal:
             # Getting a random value to decide between exploration or exploitation
             random_value = random.uniform(0, 1)
@@ -61,7 +66,7 @@ def main():
             if packagesRemaining < total_reward:
             #rewarding agent proportional to how many packages have been collected
                 reward += 100/(total_reward+1)
-        
+           
         
             reward -= 1
             #punishing agent on each extra step
@@ -77,7 +82,11 @@ def main():
     print(q_table)
     print("Time taken to run {0} Epochs".format(epochs))
     print("--- %s seconds ---" % (time.time() - start_time))
-    fourRoomsObj.showPath(-1,"Scenario_2.png")
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "-stochastic":
+            fourRoomsObj.showPath(-1,"Scenario_2(stochastic).png")
+    else:
+        fourRoomsObj.showPath(-1,"Scenario_2.png")
 
 
 if __name__ == "__main__":
