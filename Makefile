@@ -8,22 +8,22 @@ clean:
 	rm -rf venv
 	find -iname "*.pyc" -delete
 
-run:
+scenario1:
 	python3 Scenario1.py
 
-run2:
+scenario1-sto:
 	python3 Scenario1.py -stochastic	 
 
-run3:
+scenario2:
 	python3 Scenario2.py
 
-run4:
+scenario2-sto:
 	python3 Scenario2.py -stochastic
 
-run5:
+scenario3:
 	python3 Scenario3.py
 
-run6:
+Scenario3-sto:
 	python3 Scenario3.py -stochastic	 
 
 
