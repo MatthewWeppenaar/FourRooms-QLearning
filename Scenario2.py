@@ -14,9 +14,9 @@ def convertTo1D(n):
 def main():
     if len(sys.argv) == 2:
         if sys.argv[1] == "-stochastic":
-            fourRoomsObj = FourRooms('simple',stochastic="True")
+            fourRoomsObj = FourRooms('multi',stochastic="True")
     else:
-        fourRoomsObj = FourRooms('simple')
+        fourRoomsObj = FourRooms('multi')
     
     # Hyperparameters
     learning_rate = 0.3
@@ -37,7 +37,7 @@ def main():
         fourRoomsObj.newEpoch()
         state = fourRoomsObj.getPosition()
         # Reset environment
-        print(trip)
+        #print(trip)
         # Set initial terminal state to False
         isTerminal = False
         #adding exploration decay
@@ -79,7 +79,6 @@ def main():
 
             state = newPos
     # Showing the final path
-    print(q_table)
     print("Time taken to run {0} Epochs".format(epochs))
     print("--- %s seconds ---" % (time.time() - start_time))
     if len(sys.argv) == 2:
