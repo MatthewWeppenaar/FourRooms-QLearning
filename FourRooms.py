@@ -150,6 +150,22 @@ class FourRooms:
         # Create plot
         pyplot.imshow(pixels, cmap=FourRooms.custom_cmap, interpolation='nearest')
 
+        if self.scenario == 'simple':
+            if self.stochastic:
+                pyplot.title("Scenario 1(Stochastic)")
+            else:
+                pyplot.title("Scenario 1")
+        elif self.scenario == 'multi':
+            if self.stochastic:
+                pyplot.title("Scenario 2(Stochastic)")
+            else:
+                pyplot.title("Scenario 2")
+        elif self.scenario == 'rgb':
+            if self.stochastic:
+                pyplot.title("Scenario 3(Stochastic)")
+            else:
+                pyplot.title("Scenario 3")
+
         if savefig is None:
             pyplot.show()
         else:
