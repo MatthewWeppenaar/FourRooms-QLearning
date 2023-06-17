@@ -23,7 +23,7 @@ def main():
     discount_factor = 0.9
     exploration = 0.1  # very low exploration rate
     epochs = 10000
-
+    print(fourRoomsObj.stochastic)
     # Creating a Q-table, given the set of states and set of actions
     q_table = np.zeros([12 * 12, 4])
 
@@ -60,7 +60,7 @@ def main():
             reward = 0
             # If the package is collected, we reward the agent with 100
             if packagesRemaining == 0:
-                reward += 50
+                reward += 100
             # Else we penalize for each extra step
             else:
                 reward -= 1
